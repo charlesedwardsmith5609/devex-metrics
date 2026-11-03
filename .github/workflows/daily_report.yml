@@ -33,7 +33,7 @@ jobs:
           devex-metrics --owner "${REPO%%/*}" --repo "${REPO##*/}" \
             --window "$WINDOW_DAYS" --format json > metrics.json
           devex-metrics --owner "${REPO%%/*}" --repo "${REPO##*/}" --window "$WINDOW_DAYS"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: dora-metrics
           path: metrics.json
