@@ -1,0 +1,39 @@
+name: Daily DORA report
+
+on:
+  schedule:
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+    inputs:
+      window_days:
+        description: Lookback window in days
+        default: "30"
+        required: false
+
+permissions:
+  contents: read
+  deployments: read
+  pull-requests: read
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - name: Collect metrics
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          WINDOW_DAYS: ${{ inputs.window_days || '30' }}
+          REPO: ${{ github.repository }}
+        run: |
+          devex-metrics --owner "${REPO%%/*}" --repo "${REPO##*/}" \
+            --window "$WINDOW_DAYS" --format json > metrics.json
+          devex-metrics --owner "${REPO%%/*}" --repo "${REPO##*/}" --window "$WINDOW_DAYS"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dora-metrics
+          path: metrics.json

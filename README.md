@@ -26,10 +26,10 @@ pip install -e .
 export GITHUB_TOKEN=ghp_...
 
 # Collect metrics for a repo
-devex-metrics --owner zillow --repo middleware-platform --window 30
+devex-metrics --owner your-org --repo your-repo --window 30
 
 # JSON output for dashboarding
-devex-metrics --owner zillow --repo middleware-platform --format json
+devex-metrics --owner your-org --repo your-repo --format json
 ```
 
 ## Python API
@@ -37,7 +37,7 @@ devex-metrics --owner zillow --repo middleware-platform --format json
 ```python
 from devex_metrics.collector import GitHubMetricsCollector
 
-collector = GitHubMetricsCollector(owner="zillow", repo="middleware-platform")
+collector = GitHubMetricsCollector(owner="your-org", repo="your-repo")
 metrics = collector.collect(window_days=30)
 
 print(metrics.summary())
@@ -49,7 +49,7 @@ print(f"DORA level: {metrics.dora_level}")  # Elite / High / Medium / Low
 The included workflow runs daily at 9am UTC and uploads a `metrics.json` artifact:
 
 ```yaml
-# .github/workflows/daily_report.yml already configured
+# .github/workflows/daily_report.yml is included in this repo
 # Just add it to any repo and set GITHUB_TOKEN (automatic in Actions)
 ```
 

@@ -1,18 +1,37 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "devex-metrics"
-version = "0.1.0"
+version = "0.2.0"
 description = "DORA metrics collector using the GitHub API"
 readme = "README.md"
 license = {text = "MIT"}
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = []
 
 [project.optional-dependencies]
-dev = ["pytest>=7", "pytest-cov", "responses"]
+dev = ["pytest>=7", "pytest-cov", "ruff>=0.6", "mypy>=1.11"]
 
 [project.scripts]
 devex-metrics = "devex_metrics.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["devex_metrics*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E701", "E702"]  # compact if/elif score ladders in dora_level read better inline
+
+[tool.mypy]
+python_version = "3.10"
+packages = ["devex_metrics"]
+strict = true
